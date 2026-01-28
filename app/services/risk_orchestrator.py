@@ -5,6 +5,23 @@ from app.services.llm_engine import analyze_with_llm
 MIN_CONFIDENCE = 55
 
 async def analyze_one_ticket(ticket: Ticket) -> TicketResult:
+    """
+    Analyze a single ticket using both heuristic and LLM-based methods.
+    
+    Combines baseline heuristic analysis with LLM analysis. If LLM confidence is below
+    the minimum threshold or if baseline detects an escalation signal with HIGH risk,
+    the baseline result is returned. Otherwise, LLM results are used with baseline
+    risk breakdown and combined debug signals.
+    
+    Args:
+        ticket (Ticket): The ticket to analyze.
+        
+    Returns:
+        TicketResult: Analysis result with risk score, label, and reasoning.
+        
+    Raises:
+        Returns baseline result if LLM analysis fails.
+    """
     baseline_resp = analyze_heuristic(ticket)
     baseline = baseline_resp
     
@@ -23,6 +40,7 @@ async def analyze_one_ticket(ticket: Ticket) -> TicketResult:
                 suggested_action=ai.suggested_action,
                 risk_breakdown=baseline.risk_breakdown,   # mantém breakdown heurístico por enquanto
                 debug_signals=baseline.debug_signals + [f"llm_confidence:{ai.confidence}"] + [f"llm_signal:{s}" for s in ai.signals],
+                language=ticket.language,
             )
         
     except Exception as e:
