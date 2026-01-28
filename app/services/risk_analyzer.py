@@ -1,4 +1,4 @@
-from app.models import Ticket, TicketResult, TicketResult
+from app.models import RiskLabel, Ticket, TicketResult, TicketResult
 
 ESCALATION_KEYWORDS = ["procon", "reclame aqui", "processo", "advogado"]
 CHURN_KEYWORDS = ["cancelar", "não renovo", "nao renovo", "vou sair", "encerrar", "cancelamento"]
@@ -75,6 +75,7 @@ def analyze_ticket(ticket: Ticket) -> TicketResult:
         reason_parts.append("negative tone")
 
     reason = " and ".join(reason_parts).capitalize() + "." if reason_parts else "No critical risk detected."
+    risk_label = RiskLabel(risk_label)
 
     results = TicketResult(
             id=ticket.id,
