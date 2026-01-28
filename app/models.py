@@ -58,7 +58,7 @@ class ReplySuggestionResponse(BaseModel):
     ticket_id: str
     suggested_reply: str
     confidence: int  # 0..100
-    language: str  # pt-BR | en-US
+    language: str = "en-US"  # pt-BR | en-US
     subject: str = ""
     next_steps: List[str] = []
     do_not_say: List[str] = []

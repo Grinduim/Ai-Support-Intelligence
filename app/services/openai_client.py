@@ -8,13 +8,24 @@ load_dotenv()
 # Initialize OpenAI client with API key from environment variable
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def openai_chat(system: str, user: str, model: str = "gpt-4.1-mini") -> str:
-    response = client.responses.create(
+async def openai_chat(system: str, user: str, model: str = "gpt-4o-mini") -> str:
+    """
+    Call OpenAI chat API with system and user prompts.
+    
+    Args:
+        system (str): System prompt for context and behavior.
+        user (str): User prompt for the query.
+        model (str): Model identifier (default: gpt-4o-mini).
+        
+    Returns:
+        str: The assistant's response text.
+    """
+    response = client.chat.completions.create(
         model=model,
-        input=[
-            {"role":"system", "content": system},
+        messages=[
+            {"role": "system", "content": system},
             {"role": "user", "content": user}
         ],
         temperature=0.2,
     )
-    return response.output_text
+    return response.choices[0].message.content
