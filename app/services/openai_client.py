@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
-
+gpt_model = os.getenv("GPT_MODEL", "gpt-4o-mini")
 # Initialize OpenAI client with API key from environment variable
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-async def openai_chat(system: str, user: str, model: str = "gpt-4o-mini") -> str:
+async def openai_chat(system: str, user: str, model: str = gpt_model) -> str:
     """
     Call OpenAI chat API with system and user prompts.
     
