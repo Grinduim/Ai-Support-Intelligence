@@ -59,9 +59,8 @@ async def suggest_reply_with_llm(request: ReplySuggestionRequest) -> ReplySugges
     
     try:
         response_json = json.loads(response_text)
-        confidence = response_json.get("confidence", 0)
+        confidence = max(0, min(response_json.get("confidence", 0), 100))
         reply_text = response_json.get("reply_text", "Thank you for reaching out. We will get back to you shortly.")
-        
         return ReplySuggestionResponse(
             ticket_id=request.ticket_id,
             suggested_reply=reply_text,

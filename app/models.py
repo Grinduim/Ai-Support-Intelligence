@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Dict, List
 from enum import Enum
 
@@ -12,8 +12,8 @@ class Ticket(BaseModel):
     id: str
     customer: str
     channel: str
-    last_message: str
-    conversation_summary: str
+    last_message: str = Field(..., max_length=255)
+    conversation_summary: str = Field(..., max_length=255)
     sla_hours_open: int
     language: str = "en-US"  # pt-BR | en-US
     
@@ -39,7 +39,7 @@ class AIAnalysis(BaseModel):
     risk_label: RiskLabel
     reason: str
     suggested_action: str
-    confidence: int  # 0..100
+    confidence: int = Field(..., ge=0, le=100)  # 0..100
     signals: List[str] = []
     
     
@@ -47,8 +47,8 @@ class ReplySuggestionRequest(BaseModel):
     ticket_id: str
     customer: str
     channel: str
-    last_message: str
-    conversation_summary: str
+    last_message: str = Field(..., max_length=255)
+    conversation_summary: str = Field(..., max_length=255)
     risk_label: RiskLabel
     company_tone: str  # formal | friendly | technical
     language: str  # pt-BR | en-US
@@ -57,7 +57,7 @@ class ReplySuggestionRequest(BaseModel):
 class ReplySuggestionResponse(BaseModel):
     ticket_id: str
     suggested_reply: str
-    confidence: int  # 0..100
+    confidence: int = Field(..., ge=0, le=100)  # 0..100
     language: str = "en-US"  # pt-BR | en-US
     subject: str = ""
     next_steps: List[str] = []

@@ -50,13 +50,11 @@ async def analyze_with_llm(ticket: Ticket) -> AIAnalysis:
         if start == -1 or end == -1:
             raise ValueError(f"Invalid JSON from LLM: {raw[:200]}")
         data = json.loads(raw[start:end+1])
-
-    analysis = AIAnalysis(**data)
-
     # Safety clamps
-    analysis.risk_score = max(0, min(analysis.risk_score, 100))
-    analysis.confidence = max(0, min(analysis.confidence, 100))
+    data["risk_score"] = max(0, min(data["risk_score"], 100))
+    data["confidence"] = max(0, min(data["confidence"], 100))
     
+    analysis = AIAnalysis(**data)
     # Validate and convert risk_label to enum if needed
     if isinstance(analysis.risk_label, str):
         try:
