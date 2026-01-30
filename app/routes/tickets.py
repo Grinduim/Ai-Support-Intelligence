@@ -4,7 +4,12 @@ from app.services.risk_orchestrator import analyze_one_ticket
 
 router = APIRouter()
 
-@router.post("/analyze", response_model=TicketAnalyzeResponse)
+@router.post(
+    "/analyze",
+    response_model=TicketAnalyzeResponse,
+    summary="Analyze support tickets for risk classification.",
+    description="Returns risk label, score, reason, and suggested action for each ticket."
+)
 async def analyze_ticket_endpoint(payload: TicketAnalyzeRequest):
     """
     Analyze support tickets for risk classification.

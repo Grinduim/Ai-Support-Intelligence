@@ -31,7 +31,12 @@ Just **fast, reliable decision support**.
 
 ---
 
+**Production deployment:**
+- [https://ai-support-intelligence.onrender.com/docs](https://ai-support-intelligence.onrender.com/docs)
+
+
 ## 15-second demo (Recruiter Test)
+
 
 ```bash
 curl -X POST http://localhost:8000/tickets/analyze \

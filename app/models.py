@@ -20,6 +20,23 @@ class Ticket(BaseModel):
 class TicketAnalyzeRequest(BaseModel):
     tickets: List[Ticket]
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "tickets": [
+                    {
+                        "id": "TICKET-001",
+                        "customer": "Acme Corp",
+                        "channel": "email",
+                        "last_message": "Customer message...",
+                        "conversation_summary": "Summary...",
+                        "sla_hours_open": 12,
+                        "language": "en-US"
+                    }
+                ]
+            }
+        }
+
 class TicketResult(BaseModel):
     id: str
     risk_score: int
@@ -32,6 +49,24 @@ class TicketResult(BaseModel):
 
 class TicketAnalyzeResponse(BaseModel):
     results: List[TicketResult]
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "results": [
+                    {
+                        "id": "TICKET-001",
+                        "risk_score": 85,
+                        "risk_label": "HIGH",
+                        "reason": "Customer threatened to escalate.",
+                        "suggested_action": "Prioritize and escalate to manager.",
+                        "debug_signals": ["escalation", "negative_sentiment"],
+                        "risk_breakdown": {"escalation": 50, "sentiment": 35},
+                        "language": "en-US"
+                    }
+                ]
+            }
+        }
     
 
 class AIAnalysis(BaseModel):
@@ -53,6 +88,19 @@ class ReplySuggestionRequest(BaseModel):
     company_tone: str  # formal | friendly | technical
     language: str  # pt-BR | en-US
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "ticket_id": "TICKET-001",
+                "customer": "Acme Corp",
+                "channel": "email",
+                "last_message": "Customer message...",
+                "conversation_summary": "Summary...",
+                "risk_label": "HIGH",
+                "company_tone": "formal",
+                "language": "en-US"
+            }
+        }
 
 class ReplySuggestionResponse(BaseModel):
     ticket_id: str
@@ -62,3 +110,16 @@ class ReplySuggestionResponse(BaseModel):
     subject: str = ""
     next_steps: List[str] = []
     do_not_say: List[str] = []
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "ticket_id": "TICKET-001",
+                "suggested_reply": "Thank you for your patience. We're escalating your issue.",
+                "confidence": 92,
+                "language": "en-US",
+                "subject": "Escalation Notice",
+                "next_steps": ["Assign to manager", "Follow up in 2 hours"],
+                "do_not_say": ["We can't help", "Wait longer"]
+            }
+        }

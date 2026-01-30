@@ -4,7 +4,12 @@ from app.services.reply_suggester import suggest_reply_with_llm
 
 router = APIRouter()
 
-@router.post("/suggest-reply", response_model=ReplySuggestionResponse)
+@router.post(
+    "/suggest-reply",
+    response_model=ReplySuggestionResponse,
+    summary="Suggest a customer support reply",
+    description="Returns an AI-generated reply suggestion, confidence score, and metadata for a support ticket."
+)
 async def suggest_reply_endpoint(payload: ReplySuggestionRequest):
     """
     Suggest a customer support reply using LLM based on ticket details.
