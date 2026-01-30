@@ -6,6 +6,38 @@ router = APIRouter()
 
 @router.post("/suggest-reply", response_model=ReplySuggestionResponse)
 async def suggest_reply_endpoint(payload: ReplySuggestionRequest):
+    """
+    Suggest a customer support reply using LLM based on ticket details.
+
+    Args:
+        payload (ReplySuggestionRequest): Ticket details and preferences for reply.
+
+    Returns:
+        ReplySuggestionResponse: Suggested reply, confidence score, and additional metadata.
+
+    Example Request:
+        {
+            "ticket_id": "TICKET-001",
+            "customer": "Acme Corp",
+            "channel": "email",
+            "last_message": "Customer message...",
+            "conversation_summary": "Summary...",
+            "risk_label": "HIGH",
+            "company_tone": "formal",
+            "language": "en-US"
+        }
+
+    Example Response:
+        {
+            "ticket_id": "TICKET-001",
+            "suggested_reply": "Thank you for your patience. We're escalating your issue.",
+            "confidence": 92,
+            "language": "en-US",
+            "subject": "Escalation Notice",
+            "next_steps": ["Assign to manager", "Follow up in 2 hours"],
+            "do_not_say": ["We can't help", "Wait longer"]
+        }
+    """
     try:
         response = await suggest_reply_with_llm(payload)
         return response
@@ -16,4 +48,3 @@ async def suggest_reply_endpoint(payload: ReplySuggestionRequest):
             suggested_reply="Thank you for reaching out. We will get back to you shortly.",
             confidence=0
         )
-        
